@@ -61,7 +61,15 @@ public class SocietaServiceImpl implements SocietaService{
 
 	}
 	
+	@Transactional
 	public void aggiorna(Societa societa) {
 		societaRepository.save(societa);
 	}
+	
+	@Transactional(readOnly = true)
+	public List<Societa> cercaTuttiISocietaConDipendentiConredditoAnnuoLordoMaggioreDi(int ralInput) {
+		return societaRepository.findAllDistinctByDipendenti_redditoAnnuoLordoGreaterThan(ralInput);
+	}
+	
+	
 }

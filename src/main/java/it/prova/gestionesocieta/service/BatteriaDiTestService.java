@@ -3,6 +3,9 @@ package it.prova.gestionesocieta.service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 import it.prova.gestionesocieta.exception.SocietaConDipendentiException;
 import it.prova.gestionesocieta.model.Dipendente;
 import it.prova.gestionesocieta.model.Societa;
+
 
 @Service
 public class BatteriaDiTestService {
@@ -119,6 +123,40 @@ public class BatteriaDiTestService {
         	throw new RuntimeException("testAggiornaDipendente...failed: Aggornamento fallito");
 
 		System.out.println("testAggiornaDipendente........OK");
+	}
+	
+	public void testCercaTuttiISocietaConDipendentiConRalMaggioreDi() {
+		Long nowInMillisecondi = new Date().getTime();
+		
+		// test
+		int ralToCheck = 30000;
+
+
+		IntStream.range(1, 5).forEach(i -> {
+			int ralToSet = i % 2 == 0 ? 30000 : 50000;
+			Societa nuovaSocieta = new Societa("Societa" , "via bella", new Date());
+			societaService.inserisciNuovo(nuovaSocieta);
+			dipendeteService
+					.inserisciNuovo(new Dipendente("Mario" + i, "Rossi" + i, new Date(),ralToSet, nuovaSocieta));
+			dipendeteService
+					.inserisciNuovo(new Dipendente("Anto" + i, "Bianchi" + i,new Date() ,ralToSet, nuovaSocieta));
+		});
+
+		
+		List<Societa> risultatiAttesi = societaService.cercaTuttiISocietaConDipendentiConredditoAnnuoLordoMaggioreDi(ralToCheck);
+		if (risultatiAttesi.size() != 2)
+			throw new RuntimeException(
+					"testCercaTuttiISocietaConDipendentiConRalMaggioreDi...failed: non sono il numero previsto");
+
+		
+		List<Dipendente> listaDipendentiDaSocieta = risultatiAttesi.stream()
+				.flatMap(societa -> societa.getDipendenti().stream()).collect(Collectors.toList());
+		
+		if (listaDipendentiDaSocieta.size() != 4)
+			throw new RuntimeException(
+					"testCercaTuttiISocietaConDipendentiConRalMaggioreDi...failed: gli dipendenti non sono il numero previsto");
+
+		System.out.println("testCercaTuttiISocietaConDipendentiConRalMaggioreDi........OK");
 	}
 
 }

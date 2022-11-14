@@ -13,4 +13,6 @@ public interface SocietaService {
 	public void removeConEccezione(Societa societaInstance) throws Exception;
 	
 	public void aggiorna(Societa societa);
+	
+	public List<Societa> cercaTuttiISocietaConDipendentiConredditoAnnuoLordoMaggioreDi(int ralInput);
 }

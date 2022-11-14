@@ -13,6 +13,9 @@ public interface SocietaRepository extends CrudRepository<Societa, Long>,QueryBy
 	/*@EntityGraph(attributePaths = { "dipendenti" })
 	List<Societa> findAllDistinctByDipendenti_redditoAnnuoLordoGreaterThan(int redditoAnnuoLordo);*/
 	
+	@EntityGraph(attributePaths = { "dipendenti" })
+	List<Societa> findAllDistinctByDipendenti_redditoAnnuoLordoGreaterThan(int ral);
+	
 	
 
 }
