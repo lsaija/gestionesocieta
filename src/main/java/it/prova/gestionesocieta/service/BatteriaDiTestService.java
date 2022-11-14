@@ -86,5 +86,39 @@ public class BatteriaDiTestService {
 
 		System.out.println("testRemoveConEccezioneVaInRollback........OK");
 	}
+	
+	public void testInserisciDipendente() {
+		Societa nuovaSocieta = new Societa("Societa" , "via bella", new Date());
+		societaService.inserisciNuovo(nuovaSocieta);
+
+		Dipendente dipendente1=new Dipendente("carlo","magno",new Date(),10000);
+		dipendente1.setSocieta(nuovaSocieta);
+		
+		dipendeteService.inserisciNuovo(dipendente1);
+		if (dipendente1.getId() == null || dipendente1.getId() < 1)
+			throw new RuntimeException("testInserisciDipendente...failed: inserimento fallito");
+
+		System.out.println("testInserisciDipendente........OK");
+	}
+	
+	public void testAggiornaDipendente() {
+		Societa nuovaSocieta = new Societa("Societa" , "via bella", new Date());
+		societaService.inserisciNuovo(nuovaSocieta);
+
+		Dipendente dipendente1=new Dipendente("carlo","magno",new Date(),10000);
+		dipendente1.setSocieta(nuovaSocieta);
+		
+		dipendeteService.inserisciNuovo(dipendente1);
+		if (dipendente1.getId() == null || dipendente1.getId() < 1)
+			throw new RuntimeException("testAggiornaDipendente...failed: inserimento fallito");
+		
+		String nomeNuovo="Alessandro";
+        dipendente1.setNome(nomeNuovo);
+        dipendeteService.aggiorna(dipendente1);
+        if(!dipendente1.getNome().equals("Alessandro"))
+        	throw new RuntimeException("testAggiornaDipendente...failed: Aggornamento fallito");
+
+		System.out.println("testAggiornaDipendente........OK");
+	}
 
 }
